@@ -1,0 +1,65 @@
+<form
+  [formGroup]="taskForm"
+  (ngSubmit)="onSubmit()"
+  class="border form-horizontal"
+>
+  <div
+    *ngIf="alert"
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+  >
+    Your form have been submitted correctly.
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+      (click)="closeAlert()"
+    ></button>
+  </div>
+  <div class="row mb-3">
+    <label for="title" class="col-sm-2 col-form-label">TITLE</label>
+    <div class="col-sm-10">
+      <input
+        formControlName="title"
+        id="title"
+        type="text"
+        class="form-control"
+        style="border: 1px solid black"
+      />
+      <div *ngIf="title!.touched && title!.invalid" class="alert alert-danger">
+        The title must not be empty.
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="completed" class="col-form-label col-sm-2 pt-0"
+      >COMPLETED</label
+    >
+    <div class="col-sm-10">
+      <input
+        formControlName="completed"
+        id="completed"
+        type="checkbox"
+        class="form-check-input"
+        style="border: 1px solid black"
+      />
+    </div>
+  </div>
+  <div class="row justify-content-end">
+    <div class="col-2">
+      <button
+        type="submit"
+        [disabled]="taskForm.invalid"
+        class="btn btn-secondary"
+      >
+        Save
+      </button>
+    </div>
+    <div class="col-2">
+      <a routerLink="/todolist" type="button" class="btn btn-secondary"
+        >Cancel</a
+      >
+    </div>
+  </div>
+</form>
