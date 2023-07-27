@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import {Router} from "@angular/router"
 import { ToDoService } from 'src/app/services/to-do.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class TaskFormComponent implements OnChanges{
   @Input('title') taskTitle: string | undefined; 
   @Input('completed') taskCompleted: boolean | undefined;
 
-  constructor( private fb: FormBuilder) {
+  constructor( private fb: FormBuilder, private router: Router) {
   }
   
   ngOnChanges(changes: SimpleChanges): void {
@@ -25,6 +26,7 @@ export class TaskFormComponent implements OnChanges{
   onSubmit() {
     this.submit();
     this.alert = true;
+    this.router.navigate(['/todolist']);
   }
 
   closeAlert() {
