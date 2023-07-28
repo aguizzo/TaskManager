@@ -21,9 +21,7 @@ export class AddTaskComponent {
 
     if(title != null && completed != null)
       this.service.createToDo(title.value as string, completed.value as boolean)
-        .subscribe(result => {
-          this.service.addToDo(result as ToDo)
-        });
+        .subscribe(result => List.add(result as ToDo));
   }
 
 }
