@@ -40,7 +40,6 @@ export class EditTaskComponent implements OnInit {
 
       this.service.modifyToDo(id!, this.toDo)
         .subscribe(result => {
-          console.log(result);
           this.service.editToDo(result as ToDo);
         });
       }
