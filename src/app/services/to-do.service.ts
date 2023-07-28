@@ -10,7 +10,6 @@ export class ToDoService {
 
   constructor(private http: HttpClient) { 
     this.initialize();
-    console.log("init");
    }
 
   toDos! : ToDo[];
@@ -37,7 +36,7 @@ export class ToDoService {
   getTodo(id : number) : ToDo {
     let index = this.getIndex(id);
     return this.toDos[index];
-}
+  }
 
   createToDo(title: string, completed: boolean) : Observable<any> {
     let toDo = {
@@ -65,19 +64,19 @@ export class ToDoService {
   editToDo (todo : ToDo) : void {
     let index = this.getIndex(todo.id);
     this.toDos[index] = todo;
-}
+  } 
 
   addToDo(todo : ToDo) : void {
     let lastId = this.toDos[this.toDos.length - 1].id;
     todo.id = lastId + 1;
     this.toDos.push(todo);
-}
+  }
 
   getIndex(id : number) {
     let index = this.toDos
         .findIndex(t => t.id === id);
     return index;
-}
+  }
 
 }
 
