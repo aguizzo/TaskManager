@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +8,30 @@ import { Observable } from 'rxjs';
 export class ToDoService {
   private url = 'https://jsonplaceholder.typicode.com/todos';
 
-  constructor(private http: HttpClient) {  }
+  constructor(private http: HttpClient) { 
+    this.initialize();
+   }
+
+  toDos! : ToDo[];
 
   getToDoList() : Observable<any> {
     return this.http.get(this.url);
+  }
+
+  getList() {
+    return this.toDos;
+  }
+
+  async initialize() {
+    let sync = await firstValueFrom(this.getToDoList())
+      .then((data) => {
+        this.toDos = data;
+      });
+  }
+
+  removeToDo(id : number) {
+    this.toDos = this.toDos
+      .filter(t => t.id !== id)
   }
 
   getToDo(id : number | string) : Observable<any> {
@@ -20,6 +40,7 @@ export class ToDoService {
 
   createToDo(title: string, completed: boolean) : Observable<any> {
     let toDo = {
+      userId : '2',
       title: title,
       completed: completed
     }

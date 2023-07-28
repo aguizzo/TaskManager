@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ToDoService } from 'src/app/services/to-do.service';
+import { ToDo, ToDoService } from 'src/app/services/to-do.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
+import { List } from 'src/app/services/list';
 
 @Component({
   selector: 'app-add-task',
@@ -10,8 +11,9 @@ import { TaskFormComponent } from '../task-form/task-form.component';
 export class AddTaskComponent {
 
   @ViewChild(TaskFormComponent, {static : true}) public taskForm! : TaskFormComponent;
+  list: any;
 
-  constructor(private service: ToDoService) {}
+  constructor(private service: ToDoService) {  }
 
   submit = () : void => {
     const title = this.taskForm.title;
@@ -19,7 +21,10 @@ export class AddTaskComponent {
 
     if(title != null && completed != null)
       this.service.createToDo(title.value as string, completed.value as boolean)
-        .subscribe(result => console.log(result));
+        .subscribe(result => {
+          console.log(result);
+          List.add(result as ToDo)
+        });
   }
 
 }

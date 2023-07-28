@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ToDoService, ToDo } from 'src/app/services/to-do.service';
+import { List } from 'src/app/services/list'
 
 @Component({
   selector: 'to-do-table',
@@ -13,13 +14,14 @@ export class ToDoTableComponent implements OnInit {
   faTrash = faTrash;
   idSelected = 0;
 
-
-  constructor(private service: ToDoService) { }
+  constructor(private service: ToDoService) {  }
 
   ngOnInit(): void {
-    this.service.getToDoList().subscribe(
-      data => this.toDos = data
-    );
+    setTimeout(() =>{
+      let list = this.service.getList();
+      List.Instance(list)
+      this.toDos = List.getList();
+    }, 200);
   }
 
   selectId(id : number) {
@@ -28,8 +30,8 @@ export class ToDoTableComponent implements OnInit {
 
   deleteToDo(id : number) {
     this.service.deleteToDo(id).subscribe();
-    this.toDos = this.toDos
-      .filter(t => t.id !== id)
+    List.remove(id);
+    this.toDos = List.getList();   
   }
 
   onDeleteAccept (id : number) {

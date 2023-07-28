@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToDo, ToDoService } from 'src/app/services/to-do.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { ActivatedRoute } from '@angular/router';
+import { List } from 'src/app/services/list';
 
 @Component({
   selector: 'app-edit-task',
@@ -19,12 +20,12 @@ export class EditTaskComponent implements OnInit {
     let id : string = "";
     this.route.paramMap
       .subscribe(params => id = params.get('id') as string);
-
-    this.service.getToDo(id).subscribe(
-      data => {
-        this.toDo = data;
-      } 
-    );
+    this.toDo = List.getTodo(+id);
+    // this.service.getToDo(id).subscribe(
+    //   data => {
+    //     this.toDo = data;
+    //   } 
+    // );
   }
 
   submit = () : void => {
@@ -38,7 +39,10 @@ export class EditTaskComponent implements OnInit {
       edited!.completed = this.taskForm.completed?.value as boolean;
 
       this.service.modifyToDo(id!, this.toDo)
-        .subscribe(result => console.log(result));
+        .subscribe(result => {
+          console.log(result);
+          List.edit(result as ToDo);
+        });
       }
   }
 
