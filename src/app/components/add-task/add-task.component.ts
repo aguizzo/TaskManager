@@ -23,7 +23,7 @@ export class AddTaskComponent {
       this.service.createToDo(title.value as string, completed.value as boolean)
         .subscribe(result => {
           console.log(result);
-          List.add(result as ToDo)
+          this.service.addToDo(result as ToDo)
         });
   }
 
