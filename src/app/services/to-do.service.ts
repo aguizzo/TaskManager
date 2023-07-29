@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { List } from './list';
 
 @Injectable({
@@ -8,23 +8,27 @@ import { List } from './list';
 })
 export class ToDoService {
   private url = 'https://jsonplaceholder.typicode.com/todos';
+  subject$ = new BehaviorSubject<ToDo[] | any>(null);
+  fecthData! : Promise<any>
 
   constructor(private http: HttpClient) { 
-    this.initialize();
+      this.initialize();
    }
-
-  fecthData! : Promise<any>
 
   getToDoList() : Observable<any> {
     return this.http.get(this.url);
   }
 
   getFetchData() {
-    return this.fecthData;
+    //return this.fecthData;
+    return this.subject$;
   }
 
   initialize() {
-    this.fecthData = firstValueFrom(this.getToDoList());
+    // this.fecthData = firstValueFrom(this.getToDoList());
+    this.getToDoList().subscribe(
+      data => this.subject$.next(data)
+    )
   }
 
   // getToDo(id : number | string) : Observable<any> {
