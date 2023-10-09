@@ -20,7 +20,7 @@ export class EditTaskComponent implements OnInit {
     let id : string = "";
     this.route.paramMap
       .subscribe(params => id = params.get('id') as string);
-    this.toDo = this.service.getTodo(+id);
+    this.toDo = List.getTodo(+id);
     // this.service.getToDo(id).subscribe(
     //   data => {
     //     this.toDo = data;
@@ -39,9 +39,7 @@ export class EditTaskComponent implements OnInit {
       edited!.completed = this.taskForm.completed?.value as boolean;
 
       this.service.modifyToDo(id!, this.toDo)
-        .subscribe(result => {
-          this.service.editToDo(result as ToDo);
-        });
+        .subscribe(result => List.edit(result as ToDo));
       }
   }
 

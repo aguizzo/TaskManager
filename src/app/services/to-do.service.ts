@@ -1,42 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
+import { List } from './list';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToDoService {
   private url = 'https://jsonplaceholder.typicode.com/todos';
+  subject$ = new BehaviorSubject<ToDo[] | any>(null);
+  fecthData! : Promise<any>
 
   constructor(private http: HttpClient) { 
-    this.initialize();
+      this.initialize();
    }
-
-  toDos! : ToDo[];
 
   getToDoList() : Observable<any> {
     return this.http.get(this.url);
   }
 
-  getList() {
-    return this.toDos;
+  getFetchData() {
+    //return this.fecthData;
+    return this.subject$;
   }
 
-  async initialize() {
-    let sync = await firstValueFrom(this.getToDoList())
-      .then((data) => {
-        this.toDos = data;
-      });
+  initialize() {
+    // this.fecthData = firstValueFrom(this.getToDoList());
+    this.getToDoList().subscribe(
+      data => this.subject$.next(data)
+    )
   }
 
   // getToDo(id : number | string) : Observable<any> {
   //   return this.http.get(this.url + '/' + id);
   // }
-
-  getTodo(id : number) : ToDo {
-    let index = this.getIndex(id);
-    return this.toDos[index];
-  }
 
   createToDo(title: string, completed: boolean) : Observable<any> {
     let toDo = {
@@ -53,29 +50,6 @@ export class ToDoService {
 
   deleteToDo(id : number) : Observable<any>{
     return this.http.delete(this.url + '/' + id);
-  }
-
-  removeToDo(id : number) {
-    this.toDos = this.toDos
-      .filter(t => t.id !== id)
-  }
-
-
-  editToDo (todo : ToDo) : void {
-    let index = this.getIndex(todo.id);
-    this.toDos[index] = todo;
-  } 
-
-  addToDo(todo : ToDo) : void {
-    let lastId = this.toDos[this.toDos.length - 1].id;
-    todo.id = lastId + 1;
-    this.toDos.push(todo);
-  }
-
-  getIndex(id : number) {
-    let index = this.toDos
-        .findIndex(t => t.id === id);
-    return index;
   }
 
 }
